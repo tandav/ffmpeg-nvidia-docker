@@ -23,9 +23,11 @@ jobs:
           ls -la
           pwd
         
-      # - name: build image
-        # run: docker build -t ${{ env.TAG_PREFIX }}:test .
-      
+      - name: build image
+        run: make build
+
+      - name: test image
+        run: make test
       
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v2
