@@ -22,12 +22,16 @@ jobs:
         run: |
           ls -la
           pwd
-        
-      - name: build image
-        run: make build
 
-      - name: test image
-        run: make test
+      - name: test docker is available
+        run: docker run --rm hello-world
+        # run: docker run --rm nvidia/cuda:11.0-base nvidia-smi
+        
+      # - name: build image
+      #   run: make build
+
+      # - name: test image
+      #   run: make test
       
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v2
