@@ -1,0 +1,29 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+env:
+  TAG_PREFIX: tandav/ffmpeg-nvidia
+
+jobs:
+  build:
+    runs-on: [self-hosted, gpu]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: test gpu is available
+        run: nvidia-smi
+
+      - name: build image
+        run: make build
+
+      - name: test image
+        run: make test
+      
+      - name: push image
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+        run: make push
