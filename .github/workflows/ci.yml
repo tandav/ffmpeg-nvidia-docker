@@ -18,14 +18,9 @@ jobs:
       - name: test gpu is available
         run: nvidia-smi
 
-      - name: ls pwd
-        run: |
-          ls -la
-          pwd
-
       - name: test docker is available
         # run: docker run --rm hello-world
-        run: docker run --rm nvidia/cuda:11.0-base nvidia-smi
+        run: docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi
         
       # - name: build image
       #   run: make build
