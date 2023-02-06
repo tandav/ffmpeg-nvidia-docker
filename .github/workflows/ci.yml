@@ -15,6 +15,14 @@ jobs:
     steps:
       - name: test gpu is available
         run: nvidia-smi
+
+      - name ls pwd
+        run: |
+          ls -la
+          pwd
+        
+      # - name: build image
+        # run: docker build -t ${{ env.TAG_PREFIX }}:test .
       
       # - uses: actions/checkout@v3
       
