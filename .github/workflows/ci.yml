@@ -20,7 +20,7 @@ jobs:
 
       - name: test docker is available
         # run: docker run --rm hello-world
-        run: docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi
+        run: docker run --rm --gpus all nvidia/cuda:11.7.1-cudnn8-devel-ubuntu22.04
         
       # - name: build image
       #   run: make build
