@@ -39,7 +39,7 @@ RUN apt-get update && apt-get -y install \
 # https://docs.nvidia.com/video-technologies/video-codec-sdk/ffmpeg-with-nvidia-gpu/
 RUN git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git && \
     cd nv-codec-headers && make install && cd - && \
-    git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg/ && cd ffmpeg && \
+    git clone --depth 1 https://git.ffmpeg.org/ffmpeg.git ffmpeg/ && cd ffmpeg && \
     ./configure \
     --enable-nonfree \
     --enable-cuda-nvcc \
@@ -48,7 +48,9 @@ RUN git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git && \
     --extra-ldflags=-L/usr/local/cuda/lib64 \
     --disable-static \
     --enable-shared && \
-    make -j $(nproc) && \
+    make -j 10 && \
     make install
+
+# note: make -j $(nproc) fails on my 20-core machine. 10 is maximum number of cores I can use without failing
 
 CMD ffmpeg

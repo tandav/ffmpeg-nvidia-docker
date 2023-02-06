@@ -9,7 +9,7 @@ test:
 
 .PHONY: build
 build:
-	docker build -t tandav/ffmpeg-nvidia .
+	BUILDKIT_PROGRESS=plain docker build -t tandav/ffmpeg-nvidia .
 
 .PHONY: push
 push:
