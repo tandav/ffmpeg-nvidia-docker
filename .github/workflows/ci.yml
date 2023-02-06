@@ -6,9 +6,6 @@ on:
       - master
   pull_request:
 
-env:
-  TAG_PREFIX: tandav/ffmpeg-nvidia
-
 jobs:
   build:
     runs-on: [self-hosted, gpu]
