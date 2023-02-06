@@ -18,43 +18,12 @@ jobs:
       - name: test gpu is available
         run: nvidia-smi
 
-      # - name: test docker is available
-        # run: docker run --rm hello-world
-        # run: docker run --rm --gpus all nvidia/cuda:11.7.1-cudnn8-devel-ubuntu22.04
-        
       - name: build image
         run: make build
 
       - name: test image
         run: make test
       
-      # - name: Set up QEMU
-      #   uses: docker/setup-qemu-action@v2
-
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v2
-
-      # # https://docs.docker.com/build/ci/github-actions/examples/#test-your-image-before-pushing-it
-
-      # - name: Build test Docker image
-      #   uses: docker/build-push-action@v4
-      #   with:
-      #     load: true
-      #     tags: ${{ env.TAG_PREFIX }}:test
-      
-      # - name: test lightgbm works 
-      #   run: docker run --rm -v $PWD:/app --workdir /app ${{ env.TAG_PREFIX }}:test python train_model.py
-
-      # - name: Login to DockerHub
-      #   if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
-      #   uses: docker/login-action@v2
-      #   with:
-      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      # - name: Build and push Docker image
-      #   if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
-      #   uses: docker/build-push-action@v4
-      #   with:
-      #     push: true
-      #     tags: ${{ env.TAG_PREFIX }}:${{ github.sha }},${{ env.TAG_PREFIX }}:latest
+      - name: push image
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+        run: make push

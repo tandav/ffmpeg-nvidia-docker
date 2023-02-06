@@ -1,6 +1,5 @@
 .PHONY: test
 test:
-	# test video
 	docker run --rm --gpus all \
 	-v $$PWD:/app \
 	tandav/ffmpeg-nvidia \
