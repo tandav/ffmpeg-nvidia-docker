@@ -1,7 +1,7 @@
 .PHONY: test
 test:
 	# test video
-	docker run --rm -it --gpus all \
+	docker run --rm --gpus all \
 	-v $$PWD:/app \
 	tandav/ffmpeg-nvidia \
 	ffmpeg -y -hwaccel cuda -hwaccel_output_format cuda -extra_hw_frames 4 -i /app/video.mp4 -c:v h264_nvenc /app/output.mp4
