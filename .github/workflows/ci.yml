@@ -16,7 +16,7 @@ jobs:
       - name: test gpu is available
         run: nvidia-smi
 
-      - name ls pwd
+      - name: ls pwd
         run: |
           ls -la
           pwd
