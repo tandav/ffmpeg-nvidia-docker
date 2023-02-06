@@ -18,15 +18,15 @@ jobs:
       - name: test gpu is available
         run: nvidia-smi
 
-      - name: test docker is available
+      # - name: test docker is available
         # run: docker run --rm hello-world
-        run: docker run --rm --gpus all nvidia/cuda:11.7.1-cudnn8-devel-ubuntu22.04
+        # run: docker run --rm --gpus all nvidia/cuda:11.7.1-cudnn8-devel-ubuntu22.04
         
-      # - name: build image
-      #   run: make build
+      - name: build image
+        run: make build
 
-      # - name: test image
-      #   run: make test
+      - name: test image
+        run: make test
       
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v2
