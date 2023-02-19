@@ -5,7 +5,7 @@ FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04
 ENV NVIDIA_DRIVER_CAPABILITIES compute,video,utility
 
 # https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu
-RUN apt-get update && apt-get -y install \
+RUN apt-get update && apt-get --yes --no-install-recommends install \
   autoconf \
   automake \
   build-essential \
@@ -34,7 +34,8 @@ RUN apt-get update && apt-get -y install \
   libc6-dev \
   unzip \
   libnuma1 \
-  libnuma-dev
+  libnuma-dev \
+  && rm -rf /var/cache/apt
 
 # https://docs.nvidia.com/video-technologies/video-codec-sdk/ffmpeg-with-nvidia-gpu/
 RUN git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git && \
@@ -48,9 +49,9 @@ RUN git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git && \
     --extra-ldflags=-L/usr/local/cuda/lib64 \
     --disable-static \
     --enable-shared && \
-    make -j 10 && \
+    make -j 5 && \
     make install
 
-# note: make -j $(nproc) fails on my 20-core machine. 10 is maximum number of cores I can use without failing
+# note: make -j $(nproc) fails on my 20-core machine. 5 is maximum number of cores I can use without failing
 
 CMD ffmpeg

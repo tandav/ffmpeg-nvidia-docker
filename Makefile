@@ -8,7 +8,7 @@ test:
 
 .PHONY: build
 build:
-	BUILDKIT_PROGRESS=plain docker build -t tandav/ffmpeg-nvidia .
+	DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build -t tandav/ffmpeg-nvidia .
 
 .PHONY: push
 push:
