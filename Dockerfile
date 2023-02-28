@@ -38,9 +38,13 @@ RUN apt-get update && apt-get --yes --no-install-recommends install \
   && rm -rf /var/cache/apt
 
 # https://docs.nvidia.com/video-technologies/video-codec-sdk/ffmpeg-with-nvidia-gpu/
-RUN git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git && \
-    cd nv-codec-headers && make install && cd - && \
-    git clone --depth 1 https://git.ffmpeg.org/ffmpeg.git ffmpeg/ && cd ffmpeg && \
+
+RUN git clone --depth 1 --branch sdk/11.1 https://git.videolan.org/git/ffmpeg/nv-codec-headers.git && \
+    cd nv-codec-headers && \
+    make install
+
+RUN git clone --depth 1 --branch release/6.0 https://git.ffmpeg.org/ffmpeg.git && \
+    cd ffmpeg && \
     ./configure \
     --enable-nonfree \
     --enable-cuda-nvcc \
