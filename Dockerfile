@@ -1,4 +1,5 @@
-FROM nvidia/cuda:12.0.1-cudnn8-devel-ubuntu22.04
+ARG BASE_IMAGE
+FROM $BASE_IMAGE
 
 # https://github.com/NVIDIA/nvidia-docker/wiki/Usage
 # https://github.com/NVIDIA/nvidia-docker/issues/531
@@ -53,9 +54,10 @@ RUN git clone --depth 1 --branch release/6.0 https://git.ffmpeg.org/ffmpeg.git &
     --extra-ldflags=-L/usr/local/cuda/lib64 \
     --disable-static \
     --enable-shared && \
-    make -j 5 && \
+    make && \
     make install
-
+  
+# make -j 5 && \
 # note: make -j $(nproc) fails on my 20-core machine. 5 is maximum number of cores I can use without failing
 
 CMD ffmpeg
