@@ -1,13 +1,6 @@
 import requests
 import subprocess
-import dataclasses
 import json
-
-
-@dataclasses.dataclass
-class BuildResult:
-    tag: str
-    returncode: int
 
 
 def dockerhub_image_tags(image: str) -> list[str]:
@@ -35,38 +28,32 @@ def base_image_tags() -> list[str]:
 
 def build(
     base_image_tag: str,
-    tag_prefix: str = 'tandav/ffmpeg',
-    latest: bool = False,
-) -> str:
-    if latest:
-        tag = f'{tag_prefix}:latest'
-    else:
-        tag = f'{tag_prefix}:cuda{base_image_tag}'
-    cmd = ['docker', 'build', '--build-arg', f'BASE_IMAGE=nvidia/cuda:{base_image_tag}', '-t', tag, '.']
-    print('building tag', tag)
+    image: str,
+) -> int:
+    cmd = ['docker', 'build', '--build-arg', f'BASE_IMAGE=nvidia/cuda:{base_image_tag}', '-t', image, '.']
+    print('building image, cmd:', cmd)
     p = subprocess.run(cmd, env={'DOCKER_BUILDKIT': '1', 'BUILDKIT_PROGRESS': 'plain'})
-    return BuildResult(tag=tag, returncode=p.returncode)
+    return p.returncode
 
 
-def push(tag: str) -> None:
-    cmd = ['docker', 'push', tag]
-    print('pushing tag', tag)
-    subprocess.check_call(cmd)
+def tag_and_push(image: str, tag: str) -> None:
+    print('tag and push', f'{image}:{tag}')
+    subprocess.check_call(['docker', 'tag', image, f'{image}:{tag}'])
+    subprocess.check_call(['docker', 'push', f'{image}:{tag}'])
 
 
 def main():
+    IMAGE = 'tandav/ffmpeg-nvidia'
+
     results = {}
     for i, base_image_tag in enumerate(base_image_tags()):
-        result = build(base_image_tag)
-        push(result.tag)
-        results[base_image_tag] = result
+        results[base_image_tag] = build(base_image_tag, IMAGE)
+        tag_and_push(IMAGE, f'cuda{base_image_tag}')
         if i == 0:
-            result = build(base_image_tag, latest=True)
-            push(result.tag)
-            results['latest'] = result
+            tag_and_push(IMAGE, 'latest')
     
     with open('results.json', 'w') as f:
-        json.dump({k: dataclasses.asdict(v) for k, v in results.items()}, f, indent=4)
+        json.dump(results, f, indent=4)
 
 
 if __name__ == '__main__':
